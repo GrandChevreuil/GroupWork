@@ -1,6 +1,7 @@
 package com.fr.spring.groupwork.models;
 
 import javax.persistence.*;
+import com.fr.spring.groupwork.models.enums.ERole;
 
 @Entity
 @Table(name = "roles")

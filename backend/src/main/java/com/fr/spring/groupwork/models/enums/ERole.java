@@ -1,4 +1,4 @@
-package com.fr.spring.groupwork.models;
+package com.fr.spring.groupwork.models.enums;
 
 public enum ERole {
   ROLE_USER,

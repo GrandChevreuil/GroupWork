@@ -17,10 +17,7 @@ const login = (username, password) => {
       password,
     })
     .then((response) => {
-      if (response.data.username) {
-        localStorage.setItem("user", JSON.stringify(response.data));
-      }
-
+      localStorage.setItem("user", JSON.stringify(response.data));
       return response.data;
     });
 };

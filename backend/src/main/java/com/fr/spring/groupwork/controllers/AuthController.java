@@ -23,13 +23,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fr.spring.groupwork.models.*;
-
+import com.fr.spring.groupwork.models.enums.ERole;
 import com.fr.spring.groupwork.payload.request.*;
-
 import com.fr.spring.groupwork.payload.response.*;
-
 import com.fr.spring.groupwork.repository.*;
-
 import com.fr.spring.groupwork.security.jwt.JwtUtils;
 import com.fr.spring.groupwork.security.services.UserDetailsImpl;
 

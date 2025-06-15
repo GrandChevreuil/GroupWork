@@ -4,6 +4,7 @@ import AuthService from "../services/auth.service";
 
 const Profile = () => {
   const currentUser = AuthService.getCurrentUser();
+  console.log("localstorage", localStorage);
 
   // Si pas d'utilisateur, on redirige à /login (donc pas d'erreur de lecture)
   if (!currentUser) {
