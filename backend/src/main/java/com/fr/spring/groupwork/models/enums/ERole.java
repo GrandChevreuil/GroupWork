@@ -1,7 +1,12 @@
 package com.fr.spring.groupwork.models.enums;
 
 public enum ERole {
-  ROLE_USER,
-  ROLE_MODERATOR,
-  ROLE_ADMIN
+  ADMIN_SYSTEM,
+  ADMIN_PROJECT,
+  ADMIN_OPTION,
+  SUPERVISING_STAFF,
+  OPTIONCLASS_STUDENT,
+  TEAM_MEMBER,
+  COACHES,
+  JURY_MEMBERS
 }
