@@ -30,6 +30,14 @@ import com.fr.spring.groupwork.repository.*;
 import com.fr.spring.groupwork.security.jwt.JwtUtils;
 import com.fr.spring.groupwork.security.services.UserDetailsImpl;
 
+/**
+ * File AuthController.java
+ * This class handles authentication requests, including user sign-in and sign-up.
+ * It uses Spring Security for authentication and JWT for session management.
+ * @author Mathis Mauprivez
+ * @date 18/06/2025
+ */
+
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
@@ -83,10 +91,13 @@ public class AuthController {
         .collect(Collectors.toList());
 
     return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, jwtCookie.toString())
-        .body(new UserInfoResponse(userDetails.getId(),
-                                   userDetails.getUsername(),
-                                   userDetails.getEmail(),
-                                   roles));
+        .body(new UserInfoResponse(
+            userDetails.getId(),
+            userDetails.getUsername(),
+            userDetails.getEmail(),
+            roles,
+            userDetails.getTypeUser(),
+            userDetails.isActive()));
   }
 
   @PostMapping("/signup")
@@ -98,11 +109,23 @@ public class AuthController {
       return ResponseEntity.badRequest().body(new MessageResponse("Error: Email is already in use!"));
     }
 
-    User user = new User(
-      signUpRequest.getUsername(),
-      signUpRequest.getEmail(),
-      encoder.encode(signUpRequest.getPassword())
-    );
+    // Création de l'utilisateur avec le typeUser si spécifié, sinon STUDENT par défaut
+    User user;
+    if (signUpRequest.getTypeUser() != null) {
+      user = new User(
+        signUpRequest.getUsername(),
+        signUpRequest.getEmail(),
+        encoder.encode(signUpRequest.getPassword()),
+        signUpRequest.getTypeUser()
+      );
+    } else {
+      user = new User(
+        signUpRequest.getUsername(),
+        signUpRequest.getEmail(),
+        encoder.encode(signUpRequest.getPassword()),
+        com.fr.spring.groupwork.models.enums.ETypeUser.STUDENT
+      );
+    }
 
     Set<String> strRoles = signUpRequest.getRole();
     Set<Role> roles = new HashSet<>();

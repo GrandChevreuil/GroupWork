@@ -10,7 +10,15 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import com.fr.spring.groupwork.models.User;
+import com.fr.spring.groupwork.models.enums.ETypeUser;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+
+/**
+ * File UserDetailsImpl.java
+ * This class implements the UserDetails interface, providing user details for authentication.
+ * @author Mathis Mauprivez
+ * @date 18/06/2025
+ */
 
 public class UserDetailsImpl implements UserDetails {
   private static final long serialVersionUID = 1L;
@@ -25,14 +33,20 @@ public class UserDetailsImpl implements UserDetails {
   private String password;
 
   private Collection<? extends GrantedAuthority> authorities;
+  
+  private ETypeUser typeUser;
+  
+  private boolean isActive;
 
   public UserDetailsImpl(Long id, String username, String email, String password,
-      Collection<? extends GrantedAuthority> authorities) {
+      Collection<? extends GrantedAuthority> authorities, ETypeUser typeUser, boolean isActive) {
     this.id = id;
     this.username = username;
     this.email = email;
     this.password = password;
     this.authorities = authorities;
+    this.typeUser = typeUser;
+    this.isActive = isActive;
   }
 
   public static UserDetailsImpl build(User user) {
@@ -45,7 +59,9 @@ public class UserDetailsImpl implements UserDetails {
         user.getUsername(), 
         user.getEmail(),
         user.getPassword(), 
-        authorities);
+        authorities,
+        user.getTypeUser(),
+        user.isActive());
   }
 
   @Override
@@ -70,6 +86,14 @@ public class UserDetailsImpl implements UserDetails {
   public String getUsername() {
     return username;
   }
+  
+  public ETypeUser getTypeUser() {
+    return typeUser;
+  }
+  
+  public boolean isActive() {
+    return isActive;
+  }
 
   @Override
   public boolean isAccountNonExpired() {
@@ -88,7 +112,7 @@ public class UserDetailsImpl implements UserDetails {
 
   @Override
   public boolean isEnabled() {
-    return true;
+    return isActive;  // Maintenant basé sur la valeur de isActive
   }
 
   @Override
