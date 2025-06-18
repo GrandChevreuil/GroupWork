@@ -8,6 +8,8 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
+import com.fr.spring.groupwork.models.enums.ETypeUser;
+
 @Entity
 @Table(name = "users",
        uniqueConstraints = {
@@ -37,6 +39,12 @@ public class User {
              joinColumns = @JoinColumn(name = "user_id"),
              inverseJoinColumns = @JoinColumn(name = "role_id"))
   private Set<Role> roles = new HashSet<>();
+
+ @Enumerated(EnumType.STRING)
+ private ETypeUser typeUser;
+
+ @NotBlank
+ private boolean isActive = true;
 
   public User() {
   }
