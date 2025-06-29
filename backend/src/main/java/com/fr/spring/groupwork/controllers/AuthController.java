@@ -97,7 +97,9 @@ public class AuthController {
             userDetails.getEmail(),
             roles,
             userDetails.getTypeUser(),
-            userDetails.isActive()));
+            userDetails.isActive(),
+            userDetails.getClasseId(),
+            userDetails.getClasseName()));
   }
 
   @PostMapping("/signup")

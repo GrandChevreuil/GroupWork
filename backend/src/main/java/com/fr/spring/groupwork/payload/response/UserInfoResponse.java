@@ -19,6 +19,8 @@ public class UserInfoResponse {
 	private List<String> roles;
 	private ETypeUser typeUser;
 	private boolean isActive;
+	private Long classeId;
+	private String classeName;
 
 	public UserInfoResponse(Long id, String username, String email, List<String> roles) {
 		this.id = id;
@@ -27,13 +29,15 @@ public class UserInfoResponse {
 		this.roles = roles;
 	}
 
-	public UserInfoResponse(Long id, String username, String email, List<String> roles, ETypeUser typeUser, boolean isActive) {
+	public UserInfoResponse(Long id, String username, String email, List<String> roles, ETypeUser typeUser, boolean isActive, Long classeId, String classeName) {
 		this.id = id;
 		this.username = username;
 		this.email = email;
 		this.roles = roles;
 		this.typeUser = typeUser;
 		this.isActive = isActive;
+		this.classeId = classeId;
+		this.classeName = classeName;
 	}
 
 	public Long getId() {
@@ -78,5 +82,13 @@ public class UserInfoResponse {
 	
 	public void setActive(boolean isActive) {
 		this.isActive = isActive;
+	}
+
+	public Long getClasseId() {
+		return classeId;
+	}
+
+	public String getClasseName() {
+		return classeName;
 	}
 }

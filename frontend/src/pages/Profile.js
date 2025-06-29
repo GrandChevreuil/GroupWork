@@ -24,6 +24,9 @@ const Profile = () => {
       <p>
         <strong>Email:</strong> {currentUser.email}
       </p>
+      <p>
+        <strong>Classe:</strong> {currentUser.classeName || '—'}
+      </p>
       <strong>Authorities:</strong>
       <ul>
         {currentUser.roles.map((role, idx) => (

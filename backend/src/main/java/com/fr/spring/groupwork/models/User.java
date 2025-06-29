@@ -3,6 +3,9 @@ package com.fr.spring.groupwork.models;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import javax.persistence.ManyToOne;
+
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
@@ -25,6 +28,7 @@ import com.fr.spring.groupwork.models.enums.ETypeUser;
            @UniqueConstraint(columnNames = "username"),
            @UniqueConstraint(columnNames = "email")
        })
+@JsonIgnoreProperties({"students"})
 public class User {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -48,6 +52,10 @@ public class User {
              joinColumns = @JoinColumn(name = "user_id"),
              inverseJoinColumns = @JoinColumn(name = "role_id"))
   private Set<Role> roles = new HashSet<>();
+
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "classe_id")
+  private Classe classe;
 
   @Enumerated(EnumType.STRING)
   private ETypeUser typeUser;
@@ -126,5 +134,13 @@ public class User {
 
   public void setActive(boolean isActive) {
     this.isActive = isActive;
+  }
+
+  public Classe getClasse() {
+    return classe;
+  }
+
+  public void setClasse(Classe classe) {
+    this.classe = classe;
   }
 }

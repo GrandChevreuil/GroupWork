@@ -37,9 +37,11 @@ public class UserDetailsImpl implements UserDetails {
   private ETypeUser typeUser;
   
   private boolean isActive;
+  private Long classeId;
+  private String classeName;
 
   public UserDetailsImpl(Long id, String username, String email, String password,
-      Collection<? extends GrantedAuthority> authorities, ETypeUser typeUser, boolean isActive) {
+      Collection<? extends GrantedAuthority> authorities, ETypeUser typeUser, boolean isActive, Long classeId, String classeName) {
     this.id = id;
     this.username = username;
     this.email = email;
@@ -47,6 +49,8 @@ public class UserDetailsImpl implements UserDetails {
     this.authorities = authorities;
     this.typeUser = typeUser;
     this.isActive = isActive;
+   this.classeId = classeId;
+   this.classeName = classeName;
   }
 
   public static UserDetailsImpl build(User user) {
@@ -54,14 +58,18 @@ public class UserDetailsImpl implements UserDetails {
         .map(role -> new SimpleGrantedAuthority(role.getName().name()))
         .collect(Collectors.toList());
 
+    Long classeId = user.getClasse() != null ? user.getClasse().getId() : null;
+    String classeName = user.getClasse() != null ? user.getClasse().getName() : null;
     return new UserDetailsImpl(
-        user.getId(), 
-        user.getUsername(), 
+        user.getId(),
+        user.getUsername(),
         user.getEmail(),
-        user.getPassword(), 
+        user.getPassword(),
         authorities,
         user.getTypeUser(),
-        user.isActive());
+        user.isActive(),
+        classeId,
+        classeName);
   }
 
   @Override
@@ -93,6 +101,14 @@ public class UserDetailsImpl implements UserDetails {
   
   public boolean isActive() {
     return isActive;
+  }
+
+  public Long getClasseId() {
+    return classeId;
+  }
+
+  public String getClasseName() {
+    return classeName;
   }
 
   @Override
