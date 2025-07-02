@@ -44,6 +44,7 @@ import com.fr.spring.groupwork.security.services.UserDetailsImpl;
 @RequestMapping("/api/auth")
 public class AuthController {
 
+  private static final String ROLE_NOT_FOUND_MESSAGE = "Error: Role not found.";
   private final AuthenticationManager authenticationManager;
 
   private final UserRepository userRepository;
@@ -57,14 +58,14 @@ public class AuthController {
   
   @Autowired
   public AuthController(
-		  
-		  AuthenticationManager authenticationManager,
-		  UserRepository userRepository,
-		  RoleRepository roleRepository,
-		  PasswordEncoder encoder,
-		  JwtUtils jwtUtils
-		  ) {
-	  
+      
+      AuthenticationManager authenticationManager,
+      UserRepository userRepository,
+      RoleRepository roleRepository,
+      PasswordEncoder encoder,
+      JwtUtils jwtUtils
+      ) {
+    
       this.authenticationManager= authenticationManager;
       this.userRepository = userRepository;
       this.roleRepository = roleRepository;
@@ -75,7 +76,7 @@ public class AuthController {
   
 
   @PostMapping("/signin")
-  public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
+  public ResponseEntity<UserInfoResponse> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
 
     Authentication authentication = authenticationManager
         .authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
@@ -90,20 +91,23 @@ public class AuthController {
         .map(item -> item.getAuthority())
         .collect(Collectors.toList());
 
-    return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, jwtCookie.toString())
-        .body(new UserInfoResponse(
-            userDetails.getId(),
-            userDetails.getUsername(),
-            userDetails.getEmail(),
-            roles,
-            userDetails.getTypeUser(),
-            userDetails.isActive(),
-            userDetails.getClasseId(),
-            userDetails.getClasseName()));
+    // Construction via setters pour éviter constructeur trop large
+    UserInfoResponse userInfo = new UserInfoResponse();
+    userInfo.setId(userDetails.getId());
+    userInfo.setUsername(userDetails.getUsername());
+    userInfo.setEmail(userDetails.getEmail());
+    userInfo.setRoles(roles);
+    userInfo.setTypeUser(userDetails.getTypeUser());
+    userInfo.setActive(userDetails.isActive());
+    userInfo.setClasseId(userDetails.getClasseId());
+    userInfo.setClasseName(userDetails.getClasseName());
+    return ResponseEntity.ok()
+        .header(HttpHeaders.SET_COOKIE, jwtCookie.toString())
+        .body(userInfo);
   }
 
   @PostMapping("/signup")
-  public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequest signUpRequest) {
+  public ResponseEntity<MessageResponse> registerUser(@Valid @RequestBody SignupRequest signUpRequest) {
     if (userRepository.existsByUsername(signUpRequest.getUsername())) {
       return ResponseEntity.badRequest().body(new MessageResponse("Error: Username is already taken!"));
     }
@@ -134,45 +138,45 @@ public class AuthController {
 
     if (strRoles == null) {
       Role defaultRole = roleRepository.findByName(ERole.OPTIONCLASS_STUDENT)
-        .orElseThrow(() -> new RuntimeException("Error: Role not found."));
+        .orElseThrow(() -> new com.fr.spring.groupwork.exception.RoleNotFoundException());
       roles.add(defaultRole);
     } else {
       strRoles.forEach(r -> {
         switch (r) {
           case "admin_system":
             roles.add(roleRepository.findByName(ERole.ADMIN_SYSTEM)
-              .orElseThrow(() -> new RuntimeException("Error: Role not found.")));
+              .orElseThrow(() -> new com.fr.spring.groupwork.exception.RoleNotFoundException("admin_system")));
             break;
           case "admin_project":
             roles.add(roleRepository.findByName(ERole.ADMIN_PROJECT)
-              .orElseThrow(() -> new RuntimeException("Error: Role not found.")));
+              .orElseThrow(() -> new RuntimeException(ROLE_NOT_FOUND_MESSAGE)));
             break;
           case "admin_option":
             roles.add(roleRepository.findByName(ERole.ADMIN_OPTION)
-              .orElseThrow(() -> new RuntimeException("Error: Role not found.")));
+              .orElseThrow(() -> new RuntimeException(ROLE_NOT_FOUND_MESSAGE)));
             break;
           case "supervising_staff":
             roles.add(roleRepository.findByName(ERole.SUPERVISING_STAFF)
-              .orElseThrow(() -> new RuntimeException("Error: Role not found.")));
+              .orElseThrow(() -> new RuntimeException(ROLE_NOT_FOUND_MESSAGE)));
             break;
           case "optionclass_student":
             roles.add(roleRepository.findByName(ERole.OPTIONCLASS_STUDENT)
-              .orElseThrow(() -> new RuntimeException("Error: Role not found.")));
+              .orElseThrow(() -> new RuntimeException(ROLE_NOT_FOUND_MESSAGE)));
             break;
           case "team_member":
             roles.add(roleRepository.findByName(ERole.TEAM_MEMBER)
-              .orElseThrow(() -> new RuntimeException("Error: Role not found.")));
+              .orElseThrow(() -> new RuntimeException(ROLE_NOT_FOUND_MESSAGE)));
             break;
           case "coaches":
             roles.add(roleRepository.findByName(ERole.COACHES)
-              .orElseThrow(() -> new RuntimeException("Error: Role not found.")));
+              .orElseThrow(() -> new RuntimeException(ROLE_NOT_FOUND_MESSAGE)));
             break;
           case "jury_members":
             roles.add(roleRepository.findByName(ERole.JURY_MEMBERS)
-              .orElseThrow(() -> new RuntimeException("Error: Role not found.")));
+              .orElseThrow(() -> new RuntimeException(ROLE_NOT_FOUND_MESSAGE)));
             break;
           default:
-            throw new RuntimeException("Error: Role '" + r + "' is not recognized.");
+            throw new com.fr.spring.groupwork.exception.RoleNotFoundException(r);
         }
       });
     }
@@ -183,7 +187,7 @@ public class AuthController {
   }
 
   @PostMapping("/signout")
-  public ResponseEntity<?> logoutUser() {
+  public ResponseEntity<MessageResponse> logoutUser() {
     ResponseCookie cookie = jwtUtils.getCleanJwtCookie();
     return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, cookie.toString())
         .body(new MessageResponse("You've been signed out!"));

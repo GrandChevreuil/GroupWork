@@ -6,10 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.fr.spring.groupwork.models.Classe;
 import com.fr.spring.groupwork.models.Option;
-import com.fr.spring.groupwork.models.User;
 import com.fr.spring.groupwork.repository.ClasseRepository;
 import com.fr.spring.groupwork.repository.OptionRepository;
-import com.fr.spring.groupwork.repository.UserRepository;
 
 /**
  * Implémentation de ClasseService pour la gestion des classes.
@@ -19,15 +17,12 @@ public class ClasseServiceImpl implements ClasseService {
 
     private final ClasseRepository classeRepository;
     private final OptionRepository optionRepository;
-    private final UserRepository userRepository;
 
     @Autowired
     public ClasseServiceImpl(ClasseRepository classeRepository,
-                             OptionRepository optionRepository,
-                             UserRepository userRepository) {
+                             OptionRepository optionRepository) {
         this.classeRepository = classeRepository;
         this.optionRepository = optionRepository;
-        this.userRepository = userRepository;
     }
 
     @Override

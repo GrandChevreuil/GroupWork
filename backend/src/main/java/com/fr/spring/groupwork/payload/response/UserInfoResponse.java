@@ -29,16 +29,10 @@ public class UserInfoResponse {
 		this.roles = roles;
 	}
 
-	public UserInfoResponse(Long id, String username, String email, List<String> roles, ETypeUser typeUser, boolean isActive, Long classeId, String classeName) {
-		this.id = id;
-		this.username = username;
-		this.email = email;
-		this.roles = roles;
-		this.typeUser = typeUser;
-		this.isActive = isActive;
-		this.classeId = classeId;
-		this.classeName = classeName;
-	}
+	/**
+	 * Constructeur par défaut pour permettre initialisation via setters.
+	 */
+	public UserInfoResponse() {}
 
 	public Long getId() {
 		return id;
@@ -67,6 +61,9 @@ public class UserInfoResponse {
 	public List<String> getRoles() {
 		return roles;
 	}
+	public void setRoles(List<String> roles) {
+		this.roles = roles;
+	}
 	
 	public ETypeUser getTypeUser() {
 		return typeUser;
@@ -87,8 +84,14 @@ public class UserInfoResponse {
 	public Long getClasseId() {
 		return classeId;
 	}
+	public void setClasseId(Long classeId) {
+		this.classeId = classeId;
+	}
 
 	public String getClasseName() {
 		return classeName;
+	}
+	public void setClasseName(String classeName) {
+		this.classeName = classeName;
 	}
 }

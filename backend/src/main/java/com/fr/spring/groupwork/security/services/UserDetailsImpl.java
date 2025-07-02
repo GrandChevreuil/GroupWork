@@ -33,15 +33,14 @@ public class UserDetailsImpl implements UserDetails {
   private String password;
 
   private Collection<? extends GrantedAuthority> authorities;
-  
   private ETypeUser typeUser;
-  
   private boolean isActive;
   private Long classeId;
   private String classeName;
 
+  // Constructeur principal sans les attributs de classe (9 params réduit à 7)
   public UserDetailsImpl(Long id, String username, String email, String password,
-      Collection<? extends GrantedAuthority> authorities, ETypeUser typeUser, boolean isActive, Long classeId, String classeName) {
+      Collection<? extends GrantedAuthority> authorities, ETypeUser typeUser, boolean isActive) {
     this.id = id;
     this.username = username;
     this.email = email;
@@ -49,8 +48,6 @@ public class UserDetailsImpl implements UserDetails {
     this.authorities = authorities;
     this.typeUser = typeUser;
     this.isActive = isActive;
-   this.classeId = classeId;
-   this.classeName = classeName;
   }
 
   public static UserDetailsImpl build(User user) {
@@ -60,16 +57,18 @@ public class UserDetailsImpl implements UserDetails {
 
     Long classeId = user.getClasse() != null ? user.getClasse().getId() : null;
     String classeName = user.getClasse() != null ? user.getClasse().getName() : null;
-    return new UserDetailsImpl(
+    UserDetailsImpl details = new UserDetailsImpl(
         user.getId(),
         user.getUsername(),
         user.getEmail(),
         user.getPassword(),
         authorities,
         user.getTypeUser(),
-        user.isActive(),
-        classeId,
-        classeName);
+        user.isActive());
+    // Attributs de classe assignés via setters
+    details.setClasseId(classeId);
+    details.setClasseName(classeName);
+    return details;
   }
 
   @Override
@@ -110,6 +109,12 @@ public class UserDetailsImpl implements UserDetails {
   public String getClasseName() {
     return classeName;
   }
+  public void setClasseId(Long classeId) {
+    this.classeId = classeId;
+  }
+  public void setClasseName(String classeName) {
+    this.classeName = classeName;
+  }
 
   @Override
   public boolean isAccountNonExpired() {
@@ -128,7 +133,11 @@ public class UserDetailsImpl implements UserDetails {
 
   @Override
   public boolean isEnabled() {
-    return isActive;  // Maintenant basé sur la valeur de isActive
+    // L'utilisateur est “enabled” si le compte est actif, non expiré, non verrouillé et credentials valides
+    return isActive
+        && isAccountNonExpired()
+        && isAccountNonLocked()
+        && isCredentialsNonExpired();
   }
 
   @Override
