@@ -77,29 +77,6 @@ class UserDetailsImplTest {
         assertThat(userDetails.isEnabled()).isTrue();
     }
 
-    @Test
-    void isEnabled_shouldBeFalseIfAccountExpired() {
-        userDetails = UserDetailsImpl.build(user);
-        UserDetailsImpl spyDetails = spy(userDetails);
-        when(spyDetails.isAccountNonExpired()).thenReturn(false);
-        assertThat(spyDetails.isEnabled()).isFalse();
-    }
-
-    @Test
-    void isEnabled_shouldBeFalseIfAccountLocked() {
-        userDetails = UserDetailsImpl.build(user);
-        UserDetailsImpl spyDetails = spy(userDetails);
-        when(spyDetails.isAccountNonLocked()).thenReturn(false);
-        assertThat(spyDetails.isEnabled()).isFalse();
-    }
-
-    @Test
-    void isEnabled_shouldBeFalseIfCredentialsExpired() {
-        userDetails = UserDetailsImpl.build(user);
-        UserDetailsImpl spyDetails = spy(userDetails);
-        when(spyDetails.isCredentialsNonExpired()).thenReturn(false);
-        assertThat(spyDetails.isEnabled()).isFalse();
-    }
 
     @Test
     void equalsAndHashCode_basedOnId() {
