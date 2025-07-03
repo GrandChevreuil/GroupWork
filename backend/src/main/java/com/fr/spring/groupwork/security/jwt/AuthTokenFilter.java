@@ -20,7 +20,7 @@ import com.fr.spring.groupwork.security.services.UserDetailsServiceImpl;
 
 public class AuthTokenFilter extends OncePerRequestFilter {
   @Autowired
-  private JwtUtils jwtUtils;
+  private IJwtUtils jwtUtils;
 
   @Autowired
   private UserDetailsServiceImpl userDetailsService;

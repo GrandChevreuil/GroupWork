@@ -27,7 +27,7 @@ import com.fr.spring.groupwork.models.enums.ERole;
 import com.fr.spring.groupwork.payload.request.*;
 import com.fr.spring.groupwork.payload.response.*;
 import com.fr.spring.groupwork.repository.*;
-import com.fr.spring.groupwork.security.jwt.JwtUtils;
+import com.fr.spring.groupwork.security.jwt.IJwtUtils;
 import com.fr.spring.groupwork.security.services.UserDetailsImpl;
 
 /**
@@ -53,7 +53,7 @@ public class AuthController {
 
   private final PasswordEncoder encoder;
 
-  private final JwtUtils jwtUtils;
+  private final IJwtUtils jwtUtils;
   
   
   @Autowired
@@ -63,7 +63,7 @@ public class AuthController {
       UserRepository userRepository,
       RoleRepository roleRepository,
       PasswordEncoder encoder,
-      JwtUtils jwtUtils
+      IJwtUtils jwtUtils
       ) {
     
       this.authenticationManager= authenticationManager;

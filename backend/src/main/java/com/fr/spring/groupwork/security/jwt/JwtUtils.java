@@ -15,8 +15,14 @@ import org.springframework.web.util.WebUtils;
 import com.fr.spring.groupwork.security.services.UserDetailsImpl;
 import io.jsonwebtoken.*;
 
+/**
+ * Implémentation de l'interface IJwtUtils pour la gestion des JWT
+ * Facilite les mocks
+ * @author Mathis Mauprivez
+ * @date 05/07/2025
+ */
 @Component
-public class JwtUtils {
+public class JwtUtils implements IJwtUtils {
   private static final Logger logger = LoggerFactory.getLogger(JwtUtils.class);
 
   @Value("${auth.app.jwtSecret}")
