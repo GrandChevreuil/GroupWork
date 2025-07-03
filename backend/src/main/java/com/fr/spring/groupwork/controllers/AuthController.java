@@ -108,12 +108,18 @@ public class AuthController {
 
   @PostMapping("/signup")
   public ResponseEntity<MessageResponse> registerUser(@Valid @RequestBody SignupRequest signUpRequest) {
-    if (userRepository.existsByUsername(signUpRequest.getUsername())) {
-      return ResponseEntity.badRequest().body(new MessageResponse("Error: Username is already taken!"));
-    }
-    if (userRepository.existsByEmail(signUpRequest.getEmail())) {
-      return ResponseEntity.badRequest().body(new MessageResponse("Error: Email is already in use!"));
-    }
+      boolean usernameExists = userRepository.existsByUsername(signUpRequest.getUsername());
+      if (usernameExists) {
+          return ResponseEntity
+              .badRequest()
+              .body(new MessageResponse("Error: Username is already taken!"));
+      }
+      boolean emailExists = userRepository.existsByEmail(signUpRequest.getEmail());
+      if (emailExists) {
+          return ResponseEntity
+              .badRequest()
+              .body(new MessageResponse("Error: Email is already in use!"));
+      }
 
     // Création de l'utilisateur avec le typeUser si spécifié, sinon STUDENT par défaut
     User user;
@@ -138,7 +144,7 @@ public class AuthController {
 
     if (strRoles == null) {
       Role defaultRole = roleRepository.findByName(ERole.OPTIONCLASS_STUDENT)
-        .orElseThrow(() -> new com.fr.spring.groupwork.exception.RoleNotFoundException());
+        .orElseThrow(com.fr.spring.groupwork.exception.RoleNotFoundException::new);
       roles.add(defaultRole);
     } else {
       strRoles.forEach(r -> {
