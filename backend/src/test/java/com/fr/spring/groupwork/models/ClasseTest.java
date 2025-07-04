@@ -14,6 +14,7 @@ import org.junit.jupiter.api.Test;
  * @author Mathis Mauprivez
  * @date 04/07/2025
  */
+
 class ClasseTest {
 
     private Classe classe;
@@ -30,9 +31,7 @@ class ClasseTest {
     
     @Test
     void constructorWithOption_shouldSetOption() {
-        // Arrange & Act
         Classe classeWithOption = new Classe(option);
-        
         
         assertThat(classeWithOption.getOption()).isEqualTo(option);
     }
@@ -41,11 +40,7 @@ class ClasseTest {
     void setAndGetId_shouldWorkCorrectly() {
         
         Long id = 5L;
-        
-        
         classe.setId(id);
-        
-        
         assertThat(classe.getId()).isEqualTo(id);
     }
     
@@ -53,23 +48,13 @@ class ClasseTest {
     void setAndGetName_shouldWorkCorrectly() {
         
         String name = "CS_1";
-        
-        
         classe.setName(name);
-        
-        
         assertThat(classe.getName()).isEqualTo(name);
     }
     
     @Test
     void setAndGetOption_shouldWorkCorrectly() {
-        
-        // Option already created in setUp()
-        
-        
         classe.setOption(option);
-        
-        
         assertThat(classe.getOption()).isEqualTo(option);
         assertThat(classe.getOption().getId()).isEqualTo(1);
         assertThat(classe.getOption().getName()).isEqualTo(com.fr.spring.groupwork.models.enums.EOption.COMPUTER_SCIENCE);
@@ -90,9 +75,7 @@ class ClasseTest {
         students.add(student1);
         students.add(student2);
         
-        
         classe.setStudents(students);
-        
         
         assertThat(classe.getStudents()).isEqualTo(students);
         assertThat(classe.getStudents()).hasSize(2);
@@ -101,9 +84,7 @@ class ClasseTest {
     
     @Test
     void defaultConstructor_shouldCreateEmptyStudentsSet() {
-        // Arrange & Act - Using the classe created in setUp()
-        
-        
+
         assertThat(classe.getStudents()).isNotNull();
         assertThat(classe.getStudents()).isEmpty();
     }

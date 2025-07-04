@@ -13,6 +13,7 @@ import com.fr.spring.groupwork.models.enums.EOption;
  * @author Mathis Mauprivez
  * @date 04/07/2025
  */
+
 class OptionTest {
 
     private Option option;
@@ -31,11 +32,8 @@ class OptionTest {
     
     @Test
     void constructorWithName_shouldSetName() {
-        // Arrange & Act
         EOption optionName = EOption.COMPUTER_SCIENCE;
         Option optionWithName = new Option(optionName);
-        
-        
         assertThat(optionWithName.getName()).isEqualTo(optionName);
     }
     
@@ -43,11 +41,7 @@ class OptionTest {
     void setAndGetId_shouldWorkCorrectly() {
         
         Integer id = 5;
-        
-        
         option.setId(id);
-        
-        
         assertThat(option.getId()).isEqualTo(id);
     }
     
@@ -55,11 +49,7 @@ class OptionTest {
     void setAndGetName_shouldWorkCorrectly() {
         
         EOption name = EOption.MATHEMATICS;
-        
-        
         option.setName(name);
-        
-        
         assertThat(option.getName()).isEqualTo(name);
     }
     
@@ -79,10 +69,8 @@ class OptionTest {
     
     @Test
     void constructorWithName_shouldNotSetId() {
-        // Arrange & Act
         EOption optionName = EOption.COMPUTER_SCIENCE;
         Option optionWithName = new Option(optionName);
-        
         
         assertThat(optionWithName.getId()).isNull();
     }
