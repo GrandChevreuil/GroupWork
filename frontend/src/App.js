@@ -26,8 +26,8 @@ const App = () => {
 
     if (user) {
       setCurrentUser(user);
-      setShowModeratorBoard(user.roles.includes("ROLE_MODERATOR"));
-      setShowAdminBoard(user.roles.includes("ROLE_ADMIN"));
+      setShowModeratorBoard(user.roles.includes("SUPERVISING_STAFF"));
+      setShowAdminBoard(user.roles.includes("ADMIN_SYSTEM"));
     }
 
     EventBus.on("logout", () => {
@@ -75,7 +75,9 @@ const App = () => {
             </li>
           )}
 
-          {currentUser && (
+          {currentUser &&
+            !currentUser.roles.includes("ADMIN_SYSTEM") &&
+            (
             <li className="nav-item">
               <Link to={"/user"} className="nav-link">
                 User

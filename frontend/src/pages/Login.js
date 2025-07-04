@@ -1,8 +1,9 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect, use } from "react";
 import { useNavigate } from "react-router-dom";
 import Form from "react-validation/build/form";
 import Input from "react-validation/build/input";
 import CheckButton from "react-validation/build/button";
+
 
 import AuthService from "../services/auth.service";
 
@@ -26,6 +27,10 @@ const Login = () => {
   const [message, setMessage] = useState("");
 
   const navigate = useNavigate();
+
+  useEffect(() => {
+    console.log("LocalStrorage:", localStorage);
+  });
 
   const onChangeUsername = (e) => {
     const username = e.target.value;

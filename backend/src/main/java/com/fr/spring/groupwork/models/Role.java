@@ -1,6 +1,15 @@
 package com.fr.spring.groupwork.models;
 
 import javax.persistence.*;
+import com.fr.spring.groupwork.models.enums.ERole;
+
+/**
+ * File Role.java
+ * This class represents a role entity in the system.
+ * It includes an ID and a name, which is an enumeration of ERole.
+ * @author Mathis Mauprivez
+ * @date 18/06/2025
+ */
 
 @Entity
 @Table(name = "roles")
