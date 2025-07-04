@@ -16,13 +16,13 @@ import com.fr.spring.groupwork.models.enums.ETypeUser;
  * @date 04/07/2025
  */
 
-public class UserInfoResponseTest {
+class UserInfoResponseTest {
     
     /**
      * Test du constructeur avec 4 paramètres
      */
     @Test
-    public void testConstructorWith4Parameters() {
+    void testConstructorWith4Parameters() {
         
         Long id = 1L;
         String username = "testUser";
@@ -46,7 +46,7 @@ public class UserInfoResponseTest {
      * Test du constructeur par défaut et des setters
      */
     @Test
-    public void testDefaultConstructorAndSetters() {
+    void testDefaultConstructorAndSetters() {
         
         Long id = 2L;
         String username = "anotherUser";

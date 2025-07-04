@@ -25,7 +25,7 @@ import com.fr.spring.groupwork.repository.RoleRepository;
  */
 
 @ExtendWith(MockitoExtension.class)
-public class RoleServiceImplTest {
+class RoleServiceImplTest {
 
     @Mock
     private RoleRepository roleRepository;
@@ -33,7 +33,7 @@ public class RoleServiceImplTest {
     private RoleServiceImpl roleService;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         roleService = new RoleServiceImpl(roleRepository);
     }
 
@@ -41,7 +41,7 @@ public class RoleServiceImplTest {
      * Test de getAllRoles
      */
     @Test
-    public void testGetAllRoles() {
+    void testGetAllRoles() {
         
         Role adminRole = new Role(ERole.ADMIN_SYSTEM);
         adminRole.setId(1);
@@ -60,7 +60,7 @@ public class RoleServiceImplTest {
      * Test de getRoleById pour un rôle existant
      */
     @Test
-    public void testGetRoleById_WhenRoleExists() {
+    void testGetRoleById_WhenRoleExists() {
         
         Integer roleId = 1;
         Role adminRole = new Role(ERole.ADMIN_SYSTEM);
@@ -69,8 +69,8 @@ public class RoleServiceImplTest {
 
         Optional<Role> result = roleService.getRoleById(roleId);
 
-        assertThat(result).isPresent();
-        assertThat(result.get()).isEqualTo(adminRole);
+        assertThat(result).isPresent()
+            .contains(adminRole);
         verify(roleRepository).findById(roleId);
     }
 
@@ -78,7 +78,7 @@ public class RoleServiceImplTest {
      * Test de getRoleById pour un rôle inexistant
      */
     @Test
-    public void testGetRoleById_WhenRoleDoesNotExist() {
+    void testGetRoleById_WhenRoleDoesNotExist() {
         
         Integer roleId = 999;
         when(roleRepository.findById(roleId)).thenReturn(Optional.empty());
@@ -93,7 +93,7 @@ public class RoleServiceImplTest {
      * Test de getRoleByName pour un rôle existant
      */
     @Test
-    public void testGetRoleByName_WhenRoleExists() {
+    void testGetRoleByName_WhenRoleExists() {
         
         ERole roleName = ERole.ADMIN_SYSTEM;
         Role adminRole = new Role(roleName);
@@ -102,8 +102,10 @@ public class RoleServiceImplTest {
 
         Optional<Role> result = roleService.getRoleByName(roleName);
 
-        assertThat(result).isPresent();
-        assertThat(result.get().getName()).isEqualTo(roleName);
+        assertThat(result).isPresent()
+        .hasValueSatisfying(role -> 
+            assertThat(role.getName()).isEqualTo(roleName)
+        );
         verify(roleRepository).findByName(roleName);
     }
 
@@ -111,7 +113,7 @@ public class RoleServiceImplTest {
      * Test de getRoleByName pour un rôle inexistant
      */
     @Test
-    public void testGetRoleByName_WhenRoleDoesNotExist() {
+    void testGetRoleByName_WhenRoleDoesNotExist() {
         
         ERole roleName = ERole.OPTIONCLASS_STUDENT;
         when(roleRepository.findByName(roleName)).thenReturn(Optional.empty());
