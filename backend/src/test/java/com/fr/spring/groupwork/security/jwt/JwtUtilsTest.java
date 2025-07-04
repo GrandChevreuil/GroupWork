@@ -180,6 +180,18 @@ class JwtUtilsTest {
     }
     
     @Test
+    void validateJwtToken_withUnsupportedJwtToken_shouldReturnFalse() {
+        String unsupportedAlgoHeader = "eyJhbGciOiJub25lIiwidHlwIjoiSldUIn0"; // {"alg":"none","typ":"JWT"}
+        String payload = "eyJzdWIiOiJ0ZXN0VXNlciJ9"; // {"sub":"testUser"}
+        String signature = ""; // Pas de signature pour "none"
+        String invalidToken = unsupportedAlgoHeader + "." + payload + "." + signature;
+        
+        boolean result = jwtUtils.validateJwtToken(invalidToken);
+        
+        assertThat(result).isFalse();
+    }
+    
+    @Test
     void validateJwtToken_withEmptyClaims_shouldReturnFalse() {
         boolean result = jwtUtils.validateJwtToken("");
         
