@@ -56,14 +56,12 @@ class UserControllerTest {
 
     @Test
     void getAllUsers_shouldReturnListOfUsers() throws Exception {
-        // Arrange
-        User user1 = createTestUser(1L, "user1");
+                User user1 = createTestUser(1L, "user1");
         User user2 = createTestUser(2L, "user2");
         List<User> users = Arrays.asList(user1, user2);
         
         when(userService.getAllUsers()).thenReturn(users);
         
-        // Act & Assert
         mockMvc.perform(get("/api/users")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
@@ -77,14 +75,12 @@ class UserControllerTest {
     
     @Test
     void getUserById_whenFound_shouldReturnUser() throws Exception {
-        // Arrange
         Long userId = 1L;
         User user = createTestUser(userId, "testuser");
         
         when(userService.getUserById(userId)).thenReturn(Optional.of(user));
         
-        // Act & Assert
-        mockMvc.perform(get("/api/users/{id}", userId)
+                mockMvc.perform(get("/api/users/{id}", userId)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(1))
@@ -95,13 +91,11 @@ class UserControllerTest {
     
     @Test
     void getUserById_whenNotFound_shouldReturnNotFound() throws Exception {
-        // Arrange
-        Long userId = 999L;
+                Long userId = 999L;
         
         when(userService.getUserById(userId)).thenReturn(Optional.empty());
         
-        // Act & Assert
-        mockMvc.perform(get("/api/users/{id}", userId)
+                mockMvc.perform(get("/api/users/{id}", userId)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound());
                 
@@ -110,14 +104,12 @@ class UserControllerTest {
     
     @Test
     void getUserByUsername_whenFound_shouldReturnUser() throws Exception {
-        // Arrange
-        String username = "testuser";
+                String username = "testuser";
         User user = createTestUser(1L, username);
         
         when(userService.getUserByUsername(username)).thenReturn(Optional.of(user));
         
-        // Act & Assert
-        mockMvc.perform(get("/api/users/username/{username}", username)
+                mockMvc.perform(get("/api/users/username/{username}", username)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(1))
@@ -128,13 +120,11 @@ class UserControllerTest {
     
     @Test
     void getUserByUsername_whenNotFound_shouldReturnNotFound() throws Exception {
-        // Arrange
-        String username = "nonexistent";
+                String username = "nonexistent";
         
         when(userService.getUserByUsername(username)).thenReturn(Optional.empty());
         
-        // Act & Assert
-        mockMvc.perform(get("/api/users/username/{username}", username)
+                mockMvc.perform(get("/api/users/username/{username}", username)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound());
                 
@@ -143,15 +133,13 @@ class UserControllerTest {
     
     @Test
     void deleteUser_whenFound_shouldReturnNoContent() throws Exception {
-        // Arrange
-        Long userId = 1L;
+                Long userId = 1L;
         User user = createTestUser(userId, "testuser");
         
         when(userService.getUserById(userId)).thenReturn(Optional.of(user));
         doNothing().when(userService).deleteUser(userId);
         
-        // Act & Assert
-        mockMvc.perform(delete("/api/users/{id}", userId)
+                mockMvc.perform(delete("/api/users/{id}", userId)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNoContent());
                 
@@ -161,13 +149,11 @@ class UserControllerTest {
     
     @Test
     void deleteUser_whenNotFound_shouldReturnNotFound() throws Exception {
-        // Arrange
-        Long userId = 999L;
+                Long userId = 999L;
         
         when(userService.getUserById(userId)).thenReturn(Optional.empty());
         
-        // Act & Assert
-        mockMvc.perform(delete("/api/users/{id}", userId)
+                mockMvc.perform(delete("/api/users/{id}", userId)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound());
                 
@@ -177,16 +163,14 @@ class UserControllerTest {
     
     @Test
     void getUsersByTypeUser_shouldReturnUsersWithSpecifiedType() throws Exception {
-        // Arrange
-        ETypeUser typeUser = ETypeUser.STUDENT;
+                ETypeUser typeUser = ETypeUser.STUDENT;
         User user1 = createTestUser(1L, "student1");
         User user2 = createTestUser(2L, "student2");
         List<User> students = Arrays.asList(user1, user2);
         
         when(userService.getUsersByTypeUser(typeUser)).thenReturn(students);
         
-        // Act & Assert
-        mockMvc.perform(get("/api/users/type/{typeUser}", typeUser)
+                mockMvc.perform(get("/api/users/type/{typeUser}", typeUser)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].id").value(1))
@@ -199,15 +183,13 @@ class UserControllerTest {
     
     @Test
     void getActiveUsers_shouldReturnActiveUsers() throws Exception {
-        // Arrange
-        User user1 = createTestUser(1L, "active1");
+                User user1 = createTestUser(1L, "active1");
         User user2 = createTestUser(2L, "active2");
         List<User> activeUsers = Arrays.asList(user1, user2);
         
         when(userService.getActiveUsers()).thenReturn(activeUsers);
         
-        // Act & Assert
-        mockMvc.perform(get("/api/users/active")
+                mockMvc.perform(get("/api/users/active")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].id").value(1))
@@ -220,8 +202,7 @@ class UserControllerTest {
     
     @Test
     void getInactiveUsers_shouldReturnInactiveUsers() throws Exception {
-        // Arrange
-        User user1 = createTestUser(1L, "inactive1");
+                User user1 = createTestUser(1L, "inactive1");
         User user2 = createTestUser(2L, "inactive2");
         user1.setActive(false);
         user2.setActive(false);
@@ -229,8 +210,7 @@ class UserControllerTest {
         
         when(userService.getInactiveUsers()).thenReturn(inactiveUsers);
         
-        // Act & Assert
-        mockMvc.perform(get("/api/users/inactive")
+                mockMvc.perform(get("/api/users/inactive")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].id").value(1))
@@ -243,16 +223,14 @@ class UserControllerTest {
     
     @Test
     void updateUserTypeUser_whenFound_shouldUpdateAndReturnUser() throws Exception {
-        // Arrange
-        Long userId = 1L;
+                Long userId = 1L;
         ETypeUser newType = ETypeUser.TEACHER;
         User updatedUser = createTestUser(userId, "testuser");
         updatedUser.setTypeUser(newType);
         
         when(userService.updateUserTypeUser(userId, newType)).thenReturn(updatedUser);
         
-        // Act & Assert
-        mockMvc.perform(put("/api/users/{id}/type", userId)
+                mockMvc.perform(put("/api/users/{id}/type", userId)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(newType)))
                 .andExpect(status().isOk())
@@ -265,14 +243,12 @@ class UserControllerTest {
     
     @Test
     void updateUserTypeUser_whenNotFound_shouldReturnNotFound() throws Exception {
-        // Arrange
-        Long userId = 999L;
+                Long userId = 999L;
         ETypeUser newType = ETypeUser.TEACHER;
         
         when(userService.updateUserTypeUser(userId, newType)).thenReturn(null);
         
-        // Act & Assert
-        mockMvc.perform(put("/api/users/{id}/type", userId)
+                mockMvc.perform(put("/api/users/{id}/type", userId)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(newType)))
                 .andExpect(status().isNotFound());
@@ -282,16 +258,14 @@ class UserControllerTest {
     
     @Test
     void updateUserStatus_whenFound_shouldUpdateAndReturnUser() throws Exception {
-        // Arrange
-        Long userId = 1L;
+                Long userId = 1L;
         boolean newStatus = false;
         User updatedUser = createTestUser(userId, "testuser");
         updatedUser.setActive(newStatus);
         
         when(userService.updateUserStatus(userId, newStatus)).thenReturn(updatedUser);
         
-        // Act & Assert
-        mockMvc.perform(put("/api/users/{id}/status", userId)
+                mockMvc.perform(put("/api/users/{id}/status", userId)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(newStatus)))
                 .andExpect(status().isOk())
@@ -304,14 +278,12 @@ class UserControllerTest {
     
     @Test
     void updateUserStatus_whenNotFound_shouldReturnNotFound() throws Exception {
-        // Arrange
-        Long userId = 999L;
+                Long userId = 999L;
         boolean newStatus = false;
         
         when(userService.updateUserStatus(userId, newStatus)).thenReturn(null);
         
-        // Act & Assert
-        mockMvc.perform(put("/api/users/{id}/status", userId)
+                mockMvc.perform(put("/api/users/{id}/status", userId)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(newStatus)))
                 .andExpect(status().isNotFound());
