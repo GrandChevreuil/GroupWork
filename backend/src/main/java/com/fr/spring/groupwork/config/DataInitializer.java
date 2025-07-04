@@ -21,8 +21,10 @@ public class DataInitializer implements CommandLineRunner {
     @Transactional
     public void run(String... args) throws Exception {
         for (ERole eRole : ERole.values()) {
-            roleRepository.findByName(eRole)
-                          .orElseGet(() -> roleRepository.save(new Role(eRole)));
+            // Si le rôle n'existe pas, on le crée sans stocker la valeur inutilement
+            if (roleRepository.findByName(eRole).isEmpty()) {
+                roleRepository.save(new Role(eRole));
+            }
         }
     }
 }

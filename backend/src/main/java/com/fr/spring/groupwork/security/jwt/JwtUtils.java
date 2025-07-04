@@ -15,8 +15,14 @@ import org.springframework.web.util.WebUtils;
 import com.fr.spring.groupwork.security.services.UserDetailsImpl;
 import io.jsonwebtoken.*;
 
+/**
+ * Implémentation de l'interface IJwtUtils pour la gestion des JWT
+ * Facilite les mocks
+ * @author Mathis Mauprivez
+ * @date 05/07/2025
+ */
 @Component
-public class JwtUtils {
+public class JwtUtils implements IJwtUtils {
   private static final Logger logger = LoggerFactory.getLogger(JwtUtils.class);
 
   @Value("${auth.app.jwtSecret}")
@@ -39,13 +45,16 @@ public class JwtUtils {
 
   public ResponseCookie generateJwtCookie(UserDetailsImpl userPrincipal) {
     String jwt = generateTokenFromUsername(userPrincipal.getUsername());
-    ResponseCookie cookie = ResponseCookie.from(jwtCookie, jwt).path("/api").maxAge(24 * 60 * 60).httpOnly(true).build();
-    return cookie;
+    return ResponseCookie.from(jwtCookie, jwt)
+        .path("/api")
+        .maxAge(24L * 60 * 60)
+        .httpOnly(true)
+        .build();
   }
 
   public ResponseCookie getCleanJwtCookie() {
-    ResponseCookie cookie = ResponseCookie.from(jwtCookie, null).path("/api").build();
-    return cookie;
+    // Génère un cookie vide pour nettoyer l'ancien JWT (maxAge=0)
+    return ResponseCookie.from(jwtCookie, "").path("/api").maxAge(0).httpOnly(true).build();
   }
 
   public String getUserNameFromJwtToken(String token) {

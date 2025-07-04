@@ -16,16 +16,17 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import com.fr.spring.groupwork.security.services.UserDetailsServiceImpl;
+import org.springframework.security.core.userdetails.UserDetailsService;
 
 public class AuthTokenFilter extends OncePerRequestFilter {
   @Autowired
-  private JwtUtils jwtUtils;
+  private IJwtUtils jwtUtils;
 
   @Autowired
-  private UserDetailsServiceImpl userDetailsService;
+  private UserDetailsService userDetailsService;
 
-  private static final Logger logger = LoggerFactory.getLogger(AuthTokenFilter.class);
+  // Renommage du logger pour éviter la collision avec GenericFilterBean
+  private static final Logger log = LoggerFactory.getLogger(AuthTokenFilter.class);
 
   @Override
   protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
@@ -47,14 +48,13 @@ public class AuthTokenFilter extends OncePerRequestFilter {
         SecurityContextHolder.getContext().setAuthentication(authentication);
       }
     } catch (Exception e) {
-      logger.error("Cannot set user authentication: {}", e);
+      log.error("Cannot set user authentication", e);
     }
 
     filterChain.doFilter(request, response);
   }
 
   private String parseJwt(HttpServletRequest request) {
-    String jwt = jwtUtils.getJwtFromCookies(request);
-    return jwt;
+    return jwtUtils.getJwtFromCookies(request);
   }
 }

@@ -3,10 +3,24 @@ package com.fr.spring.groupwork.models;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import javax.persistence.ManyToOne;
+
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
+
+import com.fr.spring.groupwork.models.enums.ETypeUser;
+
+/**
+ * File User.java
+ * This class represents a user entity in the system.
+ * It includes fields for username, email, password, roles, user type, and active status.
+ * The class is annotated with JPA annotations for persistence and validation annotations for data integrity.
+ * @author Mathis Mauprivez
+ * @date 18/06/2025
+ */
 
 @Entity
 @Table(name = "users",
@@ -14,6 +28,7 @@ import javax.validation.constraints.Size;
            @UniqueConstraint(columnNames = "username"),
            @UniqueConstraint(columnNames = "email")
        })
+@JsonIgnoreProperties({"students"})
 public class User {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -38,13 +53,31 @@ public class User {
              inverseJoinColumns = @JoinColumn(name = "role_id"))
   private Set<Role> roles = new HashSet<>();
 
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "classe_id")
+  private Classe classe;
+
+  @Enumerated(EnumType.STRING)
+  private ETypeUser typeUser;
+
+  private boolean isActive = true;
+
   public User() {
   }
-
   public User(String username, String email, String password) {
     this.username = username;
     this.email = email;
     this.password = password;
+    this.isActive = true;
+    this.typeUser = ETypeUser.STUDENT;
+  }
+
+  public User(String username, String email, String password, ETypeUser typeUser) {
+    this.username = username;
+    this.email = email;
+    this.password = password;
+    this.typeUser = typeUser;
+    this.isActive = true;
   }
 
   public Long getId() {
@@ -85,5 +118,29 @@ public class User {
 
   public void setRoles(Set<Role> roles) {
     this.roles = roles;
+  }
+
+  public ETypeUser getTypeUser() {
+    return typeUser;
+  }
+
+  public void setTypeUser(ETypeUser typeUser) {
+    this.typeUser = typeUser;
+  }
+
+  public boolean isActive() {
+    return isActive;
+  }
+
+  public void setActive(boolean isActive) {
+    this.isActive = isActive;
+  }
+
+  public Classe getClasse() {
+    return classe;
+  }
+
+  public void setClasse(Classe classe) {
+    this.classe = classe;
   }
 }
