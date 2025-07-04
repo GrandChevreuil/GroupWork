@@ -16,7 +16,7 @@ import org.mockito.Mockito;
  * @date 04/07/2025
  */
 
-@SpringBootTest
+@com.fr.spring.groupwork.config.GroupWorkIntegrationTest
 class GroupWorkApplicationTest {
 
     /**

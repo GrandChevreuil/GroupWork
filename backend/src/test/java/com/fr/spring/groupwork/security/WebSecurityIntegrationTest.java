@@ -16,8 +16,7 @@ import org.springframework.test.web.servlet.MockMvc;
  * @date 03/07/2025
  */
 
-@SpringBootTest
-@AutoConfigureMockMvc
+@com.fr.spring.groupwork.config.GroupWorkIntegrationTest
 class WebSecurityIntegrationTest {
 
     @Autowired

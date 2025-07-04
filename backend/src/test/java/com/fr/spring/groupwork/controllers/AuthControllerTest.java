@@ -45,8 +45,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
  * @date 03/07/2025
  */
 
-@SpringBootTest
-@AutoConfigureMockMvc(addFilters = false)
+@com.fr.spring.groupwork.config.GroupWorkIntegrationTest
+@AutoConfigureMockMvc(addFilters = false) // Surcharge le comportement par défaut pour désactiver les filtres de sécurité
 class AuthControllerTest {
     @Autowired
     private MockMvc mockMvc;
