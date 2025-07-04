@@ -72,11 +72,104 @@ class UserDetailsImplTest {
         user.setActive(false);
         userDetails = UserDetailsImpl.build(user);
         assertThat(userDetails.isEnabled()).isFalse();
+        
         user.setActive(true);
         userDetails = UserDetailsImpl.build(user);
         assertThat(userDetails.isEnabled()).isTrue();
     }
-
+    
+    @Test
+    void isEnabled_shouldDependOnAllStatusMethods() {
+        // Cas 1: isActive = false - Le reste ne devrait pas importer
+        UserDetailsImpl testUser1 = new UserDetailsImpl(1L, "test", "test@example.com", "password", 
+                Collections.emptyList(), ETypeUser.STUDENT, false) {
+            @Override
+            public boolean isAccountNonExpired() {
+                return true; // même si c'est true, isEnabled devrait retourner false car isActive est false
+            }
+            @Override
+            public boolean isAccountNonLocked() {
+                return true;
+            }
+            @Override
+            public boolean isCredentialsNonExpired() {
+                return true;
+            }
+        };
+        assertThat(testUser1.isEnabled()).isFalse();
+        
+        // Cas 2: isActive = true, mais isAccountNonExpired = false
+        UserDetailsImpl testUser2 = new UserDetailsImpl(1L, "test", "test@example.com", "password",
+                Collections.emptyList(), ETypeUser.STUDENT, true) {
+            @Override
+            public boolean isAccountNonExpired() {
+                return false; // cette méthode retourne false
+            }
+            @Override
+            public boolean isAccountNonLocked() {
+                return true;
+            }
+            @Override
+            public boolean isCredentialsNonExpired() {
+                return true;
+            }
+        };
+        assertThat(testUser2.isEnabled()).isFalse();
+        
+        // Cas 3: isActive = true, isAccountNonExpired = true, mais isAccountNonLocked = false
+        UserDetailsImpl testUser3 = new UserDetailsImpl(1L, "test", "test@example.com", "password",
+                Collections.emptyList(), ETypeUser.STUDENT, true) {
+            @Override
+            public boolean isAccountNonExpired() {
+                return true;
+            }
+            @Override
+            public boolean isAccountNonLocked() {
+                return false; // cette méthode retourne false
+            }
+            @Override
+            public boolean isCredentialsNonExpired() {
+                return true;
+            }
+        };
+        assertThat(testUser3.isEnabled()).isFalse();
+        
+        // Cas 4: isActive = true, isAccountNonExpired = true, isAccountNonLocked = true, mais isCredentialsNonExpired = false
+        UserDetailsImpl testUser4 = new UserDetailsImpl(1L, "test", "test@example.com", "password",
+                Collections.emptyList(), ETypeUser.STUDENT, true) {
+            @Override
+            public boolean isAccountNonExpired() {
+                return true;
+            }
+            @Override
+            public boolean isAccountNonLocked() {
+                return true;
+            }
+            @Override
+            public boolean isCredentialsNonExpired() {
+                return false; // cette méthode retourne false
+            }
+        };
+        assertThat(testUser4.isEnabled()).isFalse();
+        
+        // Cas 5: Toutes les méthodes retournent true
+        UserDetailsImpl testUser5 = new UserDetailsImpl(1L, "test", "test@example.com", "password",
+                Collections.emptyList(), ETypeUser.STUDENT, true) {
+            @Override
+            public boolean isAccountNonExpired() {
+                return true;
+            }
+            @Override
+            public boolean isAccountNonLocked() {
+                return true;
+            }
+            @Override
+            public boolean isCredentialsNonExpired() {
+                return true;
+            }
+        };
+        assertThat(testUser5.isEnabled()).isTrue();
+    }
 
     @Test
     void equalsAndHashCode_basedOnId() {
@@ -84,8 +177,9 @@ class UserDetailsImplTest {
         User other = new User("u1", "u1@example.com", "pwd");
         other.setId(5L);
         UserDetailsImpl details2 = UserDetailsImpl.build(other);
-        assertThat(userDetails).isEqualTo(details2);
-        assertThat(userDetails.hashCode()).isEqualTo(details2.hashCode());
+        assertThat(userDetails)
+            .isEqualTo(details2)
+            .hasSameHashCodeAs(details2);
 
         other.setId(6L);
         UserDetailsImpl details3 = UserDetailsImpl.build(other);
