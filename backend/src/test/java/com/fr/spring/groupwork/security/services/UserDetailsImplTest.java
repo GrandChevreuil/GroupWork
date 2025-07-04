@@ -19,6 +19,13 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
+/**
+ * File UserDetailsImplTest.java
+ * Tests unitaires pour la classe UserDetailsImpl
+ * @author Mathis Mauprivez
+ * @date 03/07/2025
+ */
+
 @ExtendWith(MockitoExtension.class)
 class UserDetailsImplTest {
 

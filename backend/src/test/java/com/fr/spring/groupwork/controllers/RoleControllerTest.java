@@ -21,9 +21,11 @@ import org.springframework.test.web.servlet.MockMvc;
 
 /**
  * File RoleControllerTest.java
+ * Tests unitaires pour le contrôleur RoleController
  * @author Mathis Mauprivez
  * @date 03/07/2025
  */
+
 @WebMvcTest(RoleController.class)
 @AutoConfigureMockMvc(addFilters = false)
 class RoleControllerTest {

@@ -21,6 +21,13 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+/**
+ * File ClasseServiceImplTest.java
+ * Tests unitaires pour la classe ClasseServiceImpl
+ * @author Mathis Mauprivez
+ * @date 03/07/2025
+ */
+
 @ExtendWith(MockitoExtension.class)
 class ClasseServiceImplTest {
 

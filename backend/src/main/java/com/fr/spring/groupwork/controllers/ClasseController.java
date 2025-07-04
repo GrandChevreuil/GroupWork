@@ -11,8 +11,12 @@ import com.fr.spring.groupwork.models.Classe;
 import com.fr.spring.groupwork.services.ClasseService;
 
 /**
- * Controller pour gérer les opérations CRUD sur les classes.
+ * File ClasseController.java
+ * This class handles HTTP requests related to class operations, including creating, retrieving, and deleting classes.
+ * @author Mathis Mauprivez
+ * @date 19/06/2025
  */
+
 @RestController
 @RequestMapping("/api/classes")
 public class ClasseController {

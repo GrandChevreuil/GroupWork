@@ -9,6 +9,13 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
 
+/**
+ * File WebSecurityIntegrationTest.java
+ * Tests d'intégration pour la sécurité Web
+ * @author Mathis Mauprivez
+ * @date 03/07/2025
+ */
+
 @SpringBootTest
 @AutoConfigureMockMvc
 class WebSecurityIntegrationTest {

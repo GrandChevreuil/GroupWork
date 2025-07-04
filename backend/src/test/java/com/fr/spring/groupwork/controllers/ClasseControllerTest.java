@@ -22,9 +22,10 @@ import org.springframework.test.web.servlet.MockMvc;
 /**
  * File ClasseControllerTest.java
  * Tests unitaires pour le contrôleur ClasseController
- * @author GitHub Copilot
+ * @author Mathis Mauprivez
  * @date 04/07/2025
  */
+
 @WebMvcTest(ClasseController.class)
 @AutoConfigureMockMvc(addFilters = false)
 class ClasseControllerTest {

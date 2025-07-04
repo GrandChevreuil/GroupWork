@@ -20,6 +20,13 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+/**
+ * File WebSecurityConfigTest.java
+ * Tests unitaires pour la configuration de sécurité Web
+ * @author Mathis Mauprivez
+ * @date 03/07/2025
+ */
+
 @ExtendWith(MockitoExtension.class)
 class WebSecurityConfigTest {
 
