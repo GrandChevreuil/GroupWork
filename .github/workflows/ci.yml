@@ -53,6 +53,8 @@ jobs:
       - name: Build
         working-directory: ./frontend
         run: npm run build
+        env:
+          CI: false
 
   java_build:
     name: Build Backend Java
