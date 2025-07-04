@@ -33,12 +33,9 @@ jobs:
           restore-keys: ${{ runner.os }}-m2
       - name: Build and analyze
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
-          SPRING_PROFILES_ACTIVE: test
         working-directory: ./backend
-        run: mvn clean verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar "-Dsonar.projectKey=GroupWork" "-Dsonar.host.url=$SONAR_HOST_URL" "-Dsonar.login=$SONAR_TOKEN" "-Dspring.profiles.active=test" "-Dspring.datasource.url=jdbc:h2:mem:testdb"
+        run: mvn clean verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar "-Dsonar.projectKey=GrandChevreuil_GroupWork"
 
   react_build:
     name: Build Frontend React
@@ -76,7 +73,7 @@ jobs:
           restore-keys: ${{ runner.os }}-m2
       - name: Build
         working-directory: ./backend
-        run: mvn -B package -Dspring.profiles.active=test -Dspring.datasource.url=jdbc:h2:mem:testdb
+        run: mvn -B package
 
 #   deploy:
 #     name: Déploiement
