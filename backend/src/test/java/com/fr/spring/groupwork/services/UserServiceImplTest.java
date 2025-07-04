@@ -71,9 +71,9 @@ class UserServiceImplTest {
         List<User> result = userService.getAllUsers();
 
         // Then
-        assertThat(result).isNotNull();
-        assertThat(result).hasSize(3);
-        assertThat(result).containsExactly(user1, user2, user3);
+        assertThat(result).isNotNull()
+            .hasSize(3)
+            .containsExactly(user1, user2, user3);
         verify(userRepository, times(1)).findAll();
     }
 
@@ -174,8 +174,8 @@ class UserServiceImplTest {
         List<User> result = userService.getUsersByTypeUser(typeUser);
 
         // Then
-        assertThat(result).isNotNull();
-        assertThat(result).hasSize(1);
+        assertThat(result).isNotNull()
+            .hasSize(1);
         assertThat(result.get(0).getTypeUser()).isEqualTo(typeUser);
         verify(userRepository, times(1)).findByTypeUser(typeUser);
     }
@@ -189,9 +189,9 @@ class UserServiceImplTest {
         List<User> result = userService.getActiveUsers();
 
         // Then
-        assertThat(result).isNotNull();
-        assertThat(result).hasSize(2);
-        assertThat(result).allMatch(User::isActive);
+        assertThat(result).isNotNull()
+            .hasSize(2)
+            .allMatch(User::isActive);
         verify(userRepository, times(1)).findByIsActive(true);
     }
 
@@ -204,9 +204,9 @@ class UserServiceImplTest {
         List<User> result = userService.getInactiveUsers();
 
         // Then
-        assertThat(result).isNotNull();
-        assertThat(result).hasSize(1);
-        assertThat(result).allMatch(user -> !user.isActive());
+        assertThat(result).isNotNull()
+            .hasSize(1)
+            .allMatch(user -> !user.isActive());
         verify(userRepository, times(1)).findByIsActive(false);
     }
 
