@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Routes, Route, Link } from "react-router-dom";
-import "bootstrap/dist/css/bootstrap.min.css";
-import "./App.css";
+import "./index.css";  // Tailwind CSS
+import Sidebar from "./components/Sidebar";
 
 import AuthService from "./services/auth.service";
 
@@ -47,89 +47,86 @@ const App = () => {
   };
 
   return (
-    <div>
-      <nav className="navbar navbar-expand navbar-dark bg-dark">
-        <Link to={"/"} className="navbar-brand">
-          GROUPWORK
-        </Link>
-        <div className="navbar-nav mr-auto">
-          <li className="nav-item">
-            <Link to={"/home"} className="nav-link">
-              Home
+    <div className="flex">
+      <Sidebar />
+      <div className="flex-1 p-4">
+        <nav className="bg-white shadow-md rounded-md px-4 py-2 mb-4">
+          <div className="container mx-auto flex justify-between items-center">
+            <Link to={"/"} className="text-xl font-semibold">
+              GROUPWORK
             </Link>
-          </li>
-
-          {showModeratorBoard && (
-            <li className="nav-item">
-              <Link to={"/mod"} className="nav-link">
-                Moderator Board
+            <div className="flex space-x-4">
+              <Link to={"/home"} className="text-gray-700 hover:text-blue-500">
+                Home
               </Link>
-            </li>
-          )}
 
-          {showAdminBoard && (
-            <li className="nav-item">
-              <Link to={"/admin"} className="nav-link">
-                Admin Board
-              </Link>
-            </li>
-          )}
+              {showModeratorBoard && (
+                <Link to={"/mod"} className="text-gray-700 hover:text-blue-500">
+                  Moderator Board
+                </Link>
+              )}
 
-          {currentUser &&
-            !currentUser.roles.includes("ADMIN_SYSTEM") &&
-            (
-            <li className="nav-item">
-              <Link to={"/user"} className="nav-link">
-                User
-              </Link>
-            </li>
-          )}
+              {showAdminBoard && (
+                <Link to={"/admin"} className="text-gray-700 hover:text-blue-500">
+                  Admin Board
+                </Link>
+              )}
+
+              {currentUser &&
+                !currentUser.roles.includes("ADMIN_SYSTEM") && (
+                  <Link to={"/user"} className="text-gray-700 hover:text-blue-500">
+                    User
+                  </Link>
+                )}
+            </div>
+
+            <div className="flex items-center space-x-4">
+              {currentUser ? (
+                <>
+                  <Link
+                    to={"/profile"}
+                    className="text-gray-700 hover:text-blue-500"
+                  >
+                    {currentUser.username}
+                  </Link>
+                  <a
+                    href="/login"
+                    className="text-gray-700 hover:text-blue-500"
+                    onClick={logOut}
+                  >
+                    LogOut
+                  </a>
+                </>
+              ) : (
+                <>
+                  <Link to={"/login"} className="text-gray-700 hover:text-blue-500">
+                    Login
+                  </Link>
+
+                  <Link to={"/register"} className="text-gray-700 hover:text-blue-500">
+                    Sign Up
+                  </Link>
+                </>
+              )}
+            </div>
+          </div>
+        </nav>
+
+        <div className="container mx-auto">
+          <Routes>
+            <Route exact path={"/"} element={<Home />} />
+            <Route exact path={"/home"} element={<Home />} />
+            <Route exact path="/login" element={<Login />} />
+            <Route exact path="/register" element={<Register />} />
+            <Route exact path="/profile" element={<Profile />} />
+            <Route path="/user" element={<BoardUser />} />
+            <Route path="/mod" element={<BoardModerator />} />
+            <Route path="/admin" element={<BoardAdmin />} />
+          </Routes>
         </div>
 
-        {currentUser ? (
-          <div className="navbar-nav ml-auto">
-            <li className="nav-item">
-              <Link to={"/profile"} className="nav-link">
-                {currentUser.username}
-              </Link>
-            </li>
-            <li className="nav-item">
-              <a href="/login" className="nav-link" onClick={logOut}>
-                LogOut
-              </a>
-            </li>
-          </div>
-        ) : (
-          <div className="navbar-nav ml-auto">
-            <li className="nav-item">
-              <Link to={"/login"} className="nav-link">
-                Login
-              </Link>
-            </li>
-
-            <li className="nav-item">
-              <Link to={"/register"} className="nav-link">
-                Sign Up
-              </Link>
-            </li>
-          </div>
-        )}
-      </nav>
-
-      <div className="container mt-3">
-        <Routes>
-          <Route exact path={"/"} element={<Home />} />
-          <Route exact path={"/home"} element={<Home />} />
-          <Route exact path="/login" element={<Login />} />
-          <Route exact path="/register" element={<Register />} />
-          <Route exact path="/profile" element={<Profile />} />
-          <Route path="/user" element={<BoardUser />} />
-          <Route path="/mod" element={<BoardModerator />} />
-          <Route path="/admin" element={<BoardAdmin />} />
-        </Routes>
+        {/* <AuthVerify logOut={logOut}/> */}
       </div>
-
-      {/* <AuthVerify logOut={logOut}/> */}
     </div>
   );
 };
