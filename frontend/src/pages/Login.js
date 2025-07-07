@@ -1,131 +1,131 @@
-import React, { useState, useRef, useEffect, use } from "react";
-import { useNavigate } from "react-router-dom";
-import Form from "react-validation/build/form";
-import Input from "react-validation/build/input";
-import CheckButton from "react-validation/build/button";
-
-
+import React, { useState } from "react";
+import { useNavigate, Link } from "react-router-dom";
+import {
+  Anchor,
+  Button,
+  Checkbox,
+  Paper,
+  PasswordInput,
+  Text,
+  TextInput,
+  Title,
+  Alert,
+} from '@mantine/core';
+import { IconAlertCircle } from '@tabler/icons-react';
 import AuthService from "../services/auth.service";
-
-const required = (value) => {
-  if (!value) {
-    return (
-      <div className="invalid-feedback d-block">
-        This field is required!
-      </div>
-    );
-  }
-};
+import { useAppNotifications } from "../hooks/useAppNotifications";
+import classes from "../styles/auth/Login.module.css";
 
 const Login = () => {
-  const form = useRef();
-  const checkBtn = useRef();
-
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
+  const [rememberMe, setRememberMe] = useState(false);
 
+  const notifications = useAppNotifications();
   const navigate = useNavigate();
-
-  useEffect(() => {
-    console.log("LocalStrorage:", localStorage);
-  });
-
-  const onChangeUsername = (e) => {
-    const username = e.target.value;
-    setUsername(username);
-  };
-
-  const onChangePassword = (e) => {
-    const password = e.target.value;
-    setPassword(password);
-  };
 
   const handleLogin = (e) => {
     e.preventDefault();
 
+    // Validation basique
+    if (!username.trim() || !password.trim()) {
+      notifications.showError("Veuillez remplir tous les champs");
+      return;
+    }
+
     setMessage("");
     setLoading(true);
 
-    form.current.validateAll();
+    AuthService.login(username, password).then(
+      () => {
+        notifications.showSuccess("Connexion réussie!");
+        navigate("/profile");
+        window.location.reload();
+      },
+      (error) => {
+        const resMessage =
+          (error.response &&
+            error.response.data &&
+            error.response.data.message) ||
+          error.message ||
+          error.toString();
 
-    if (checkBtn.current.context._errors.length === 0) {
-      AuthService.login(username, password).then(
-        () => {
-          navigate("/profile");
-          window.location.reload();
-        },
-        (error) => {
-          const resMessage =
-            (error.response &&
-              error.response.data &&
-              error.response.data.message) ||
-            error.message ||
-            error.toString();
-
-          setLoading(false);
-          setMessage(resMessage);
-        }
-      );
-    } else {
-      setLoading(false);
-    }
+        setLoading(false);
+        setMessage(resMessage);
+        notifications.showError("Erreur de connexion");
+      }
+    );
   };
 
   return (
-    <div className="col-md-12">
-      <div className="card card-container">
-        <img
-          src="//ssl.gstatic.com/accounts/ui/avatar_2x.png"
-          alt="profile-img"
-          className="profile-img-card"
-        />
+    <div className={classes.wrapper}>
+      <Paper className={classes.form}>
+        <Title order={2} className={classes.title}>
+          Bienvenue sur GroupWork
+        </Title>
 
-        <Form onSubmit={handleLogin} ref={form}>
-          <div className="form-group">
-            <label htmlFor="username">Username</label>
-            <Input
-              type="text"
-              className="form-control"
-              name="username"
-              value={username}
-              onChange={onChangeUsername}
-              validations={[required]}
-            />
-          </div>
+        <form onSubmit={handleLogin}>
+          <TextInput
+            label="Nom d'utilisateur"
+            placeholder="Votre nom d'utilisateur"
+            size="md"
+            radius="md"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            required
+          />
 
-          <div className="form-group">
-            <label htmlFor="password">Password</label>
-            <Input
-              type="password"
-              className="form-control"
-              name="password"
-              value={password}
-              onChange={onChangePassword}
-              validations={[required]}
-            />
-          </div>
+          <PasswordInput
+            label="Mot de passe"
+            placeholder="Votre mot de passe"
+            mt="md"
+            size="md"
+            radius="md"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
 
-          <div className="form-group">
-            <button className="btn btn-primary btn-block" disabled={loading}>
-              {loading && (
-                <span className="spinner-border spinner-border-sm"></span>
-              )}
-              <span>Login</span>
-            </button>
-          </div>
+          <Checkbox
+            label="Se souvenir de moi"
+            mt="xl"
+            size="md"
+            checked={rememberMe}
+            onChange={(e) => setRememberMe(e.currentTarget.checked)}
+          />
 
           {message && (
-            <div className="form-group">
-              <div className="alert alert-danger" role="alert">
-                {message}
-              </div>
-            </div>
+            <Alert
+              icon={<IconAlertCircle size="1rem" />}
+              title="Erreur d'authentification"
+              color="red"
+              mt="md"
+            >
+              {message}
+            </Alert>
           )}
-          <CheckButton style={{ display: "none" }} ref={checkBtn} />
-        </Form>
-      </div>
+
+          <Button
+            fullWidth
+            mt="xl"
+            size="md"
+            radius="md"
+            type="submit"
+            loading={loading}
+          >
+            Se connecter
+          </Button>
+
+          <Text ta="center" mt="md">
+            Pas encore de compte ?{' '}
+            <Anchor component={Link} to="/register" fw={500}>
+              S'inscrire
+            </Anchor>
+          </Text>
+        </form>
+      </Paper>
     </div>
   );
 };
