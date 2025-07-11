@@ -1,0 +1,34 @@
+/* Importation des polices Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@300;400;500;600;700&display=swap');
+
+/* Réinitialisation des styles */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  color: #193143;
+  background-color: #ffffff;
+  margin: 0;
+  padding: 0;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Poppins', sans-serif;
+  margin-top: 0;
+}
+
+h1 {
+  color: #5c768a;
+}
+
+h2 {
+  color: #2c3d4a;
+}
+
+h3 {
+  color: #1a2830;
+}

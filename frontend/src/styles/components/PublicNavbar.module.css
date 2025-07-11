@@ -1,0 +1,22 @@
+/* Styles pour les boutons de la barre de navigation */
+
+.signupButton {
+  border-color: #81dcc9;
+  color: #000000;
+  background-color: transparent;
+  transition: background-color 0.3s ease;
+}
+
+.signupButton:hover {
+  background-color: #bdeee3;
+}
+
+.loginButton {
+  background-color: #81dcc9;
+  color: #000000;
+  transition: background-color 0.3s ease;
+}
+
+.loginButton:hover {
+  background-color: #bdeee3;
+}

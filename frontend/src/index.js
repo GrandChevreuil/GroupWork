@@ -1,19 +1,28 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
+import './index.css';                           // Move your Tailwind reset first
+import '@mantine/core/styles.css';              // Then Mantine styles
+import '@mantine/notifications/styles.css';
+import '@mantine/carousel/styles.css';
+import '@mantine/dropzone/styles.css';
+import '@mantine/dates/styles.css';
+import '@mantine/code-highlight/styles.css';
+import './theme/fonts.css';                    // Importation des polices personnalisées
+
+import { createRoot } from 'react-dom/client';
 import { BrowserRouter } from "react-router-dom";
+import { MantineProvider } from '@mantine/core';
+import { Notifications } from '@mantine/notifications';
 
-import './index.css';
 import App from './App';
-import reportWebVitals from './reportWebVitals';
+import { theme } from './theme';
 
-ReactDOM.render(
+const container = document.getElementById('root');
+const root = createRoot(container);
+
+root.render(
   <BrowserRouter>
-    <App />
-  </BrowserRouter>,
-  document.getElementById('root')
+    <MantineProvider theme={theme} defaultColorScheme="light">
+      <Notifications position="top-right" zIndex={2077} />
+      <App />
+    </MantineProvider>
+  </BrowserRouter>
 );
-
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();

@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { Routes, Route, Link } from "react-router-dom";
-import "bootstrap/dist/css/bootstrap.min.css";
-import "./App.css";
+import { Routes, Route } from "react-router-dom";
+import "./index.css";  // Tailwind CSS
+import Sidebar from "./components/Sidebar";
+import PublicNavbar from "./components/PublicNavbar";
+import { useAppNotifications } from "./hooks/useAppNotifications";
 
 import AuthService from "./services/auth.service";
 
@@ -16,10 +18,16 @@ import BoardAdmin from "./pages/BoardAdmin";
 // import AuthVerify from "./common/AuthVerify";
 import EventBus from "./common/EventBus";
 
+/**
+ * Composant principal de l'application
+ * @author Mathis Mauprivez
+ */
 const App = () => {
   const [showModeratorBoard, setShowModeratorBoard] = useState(false);
   const [showAdminBoard, setShowAdminBoard] = useState(false);
   const [currentUser, setCurrentUser] = useState(undefined);
+  const [loading, setLoading] = useState(true);
+  const { showSuccess } = useAppNotifications();
 
   useEffect(() => {
     const user = AuthService.getCurrentUser();
@@ -29,6 +37,8 @@ const App = () => {
       setShowModeratorBoard(user.roles.includes("SUPERVISING_STAFF"));
       setShowAdminBoard(user.roles.includes("ADMIN_SYSTEM"));
     }
+
+    setLoading(false);
 
     EventBus.on("logout", () => {
       logOut();
@@ -44,90 +54,58 @@ const App = () => {
     setShowModeratorBoard(false);
     setShowAdminBoard(false);
     setCurrentUser(undefined);
+    showSuccess("Vous avez été déconnecté avec succès");
   };
 
   return (
-    <div>
-      <nav className="navbar navbar-expand navbar-dark bg-dark">
-        <Link to={"/"} className="navbar-brand">
-          GROUPWORK
-        </Link>
-        <div className="navbar-nav mr-auto">
-          <li className="nav-item">
-            <Link to={"/home"} className="nav-link">
-              Home
-            </Link>
-          </li>
+    <div className="min-h-screen bg-page">
+      {!loading && (
+        <>
+          {currentUser ? (
+    // Interface utilisateur connecté (avec sidebar)
+            <div className="flex">
+              <Sidebar />
+              <div className="flex-1 p-4">
+                <div className="container mx-auto">
+                  <Routes>
+                    <Route exact path={"/"} element={<Home />} />
+                    <Route exact path={"/home"} element={<Home />} />
+                    <Route exact path="/profile" element={<Profile />} />
+                    <Route path="/user" element={<BoardUser />} />
+                    <Route path="/mod" element={<BoardModerator />} />
+                    <Route path="/admin" element={<BoardAdmin />} />
 
-          {showModeratorBoard && (
-            <li className="nav-item">
-              <Link to={"/mod"} className="nav-link">
-                Moderator Board
-              </Link>
-            </li>
+                    {/* Rediriger vers home si déjà connecté */}
+                    <Route path="/login" element={<Home />} />
+                    <Route path="/register" element={<Home />} />
+                  </Routes>
+                </div>
+              </div>
+            </div>
+          ) : (
+            // Interface utilisateur non connecté (avec navbar publique)
+            <div className="flex flex-col min-h-screen">
+              <PublicNavbar />
+              <div className="flex-1 p-4">
+                <div className="container mx-auto">
+                  <Routes>
+                    <Route exact path={"/"} element={<Home />} />
+                    <Route exact path={"/home"} element={<Home />} />
+                    <Route exact path="/login" element={<Login />} />
+                    <Route exact path="/register" element={<Register />} />
+
+                      {/* Rediriger vers login si non connecté */}
+                      <Route path="/profile" element={<Login />} />
+                      <Route path="/user" element={<Login />} />
+                      <Route path="/mod" element={<Login />} />
+                      <Route path="/admin" element={<Login />} />
+                    </Routes>
+                  </div>
+              </div>
+            </div>
           )}
-
-          {showAdminBoard && (
-            <li className="nav-item">
-              <Link to={"/admin"} className="nav-link">
-                Admin Board
-              </Link>
-            </li>
-          )}
-
-          {currentUser &&
-            !currentUser.roles.includes("ADMIN_SYSTEM") &&
-            (
-            <li className="nav-item">
-              <Link to={"/user"} className="nav-link">
-                User
-              </Link>
-            </li>
-          )}
-        </div>
-
-        {currentUser ? (
-          <div className="navbar-nav ml-auto">
-            <li className="nav-item">
-              <Link to={"/profile"} className="nav-link">
-                {currentUser.username}
-              </Link>
-            </li>
-            <li className="nav-item">
-              <a href="/login" className="nav-link" onClick={logOut}>
-                LogOut
-              </a>
-            </li>
-          </div>
-        ) : (
-          <div className="navbar-nav ml-auto">
-            <li className="nav-item">
-              <Link to={"/login"} className="nav-link">
-                Login
-              </Link>
-            </li>
-
-            <li className="nav-item">
-              <Link to={"/register"} className="nav-link">
-                Sign Up
-              </Link>
-            </li>
-          </div>
-        )}
-      </nav>
-
-      <div className="container mt-3">
-        <Routes>
-          <Route exact path={"/"} element={<Home />} />
-          <Route exact path={"/home"} element={<Home />} />
-          <Route exact path="/login" element={<Login />} />
-          <Route exact path="/register" element={<Register />} />
-          <Route exact path="/profile" element={<Profile />} />
-          <Route path="/user" element={<BoardUser />} />
-          <Route path="/mod" element={<BoardModerator />} />
-          <Route path="/admin" element={<BoardAdmin />} />
-        </Routes>
-      </div>
+        </>
+      )}
 
       {/* <AuthVerify logOut={logOut}/> */}
     </div>
