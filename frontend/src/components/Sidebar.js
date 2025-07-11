@@ -14,19 +14,27 @@ const Sidebar = () => {
   const { showSuccess } = useAppNotifications();
 
   useEffect(() => {
-    const user = AuthService.getCurrentUser();
-    if (user) {
-      setCurrentUser(user);
-      setShowModeratorBoard(user.roles.includes("SUPERVISING_STAFF"));
-      setShowAdminBoard(user.roles.includes("ADMIN_SYSTEM"));
+    try {
+      const user = AuthService.getCurrentUser();
+      if (user) {
+        setCurrentUser(user);
+        setShowModeratorBoard(user.roles && user.roles.includes("SUPERVISING_STAFF"));
+        setShowAdminBoard(user.roles && user.roles.includes("ADMIN_SYSTEM"));
+      }
+    } catch (error) {
+      console.log("Error loading user data:", error);
     }
   }, []);
 
   const handleLogout = () => {
-    AuthService.logout();
-    setCurrentUser(null);
+    try {
+      AuthService.logout();
+      setCurrentUser(null);
     showSuccess("Vous avez été déconnecté avec succès");
     window.location.href = "/login"; // Force un rafraîchissement complet
+    } catch (error) {
+      console.log("Error during logout:", error);
+    }
   };
 
   return (
