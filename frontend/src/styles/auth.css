@@ -1,0 +1,38 @@
+/**
+ * Styles pour les pages d'authentification
+ */
+
+.auth-form-container {
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  padding: 2rem;
+  width: 100%;
+  max-width: 480px;
+  margin: 2rem auto;
+}
+
+.auth-title {
+  font-family: 'Poppins', sans-serif;
+  color: #5c768a;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+.form-footer {
+  margin-top: 1.5rem;
+  text-align: center;
+  font-size: 0.9rem;
+  color: #87939c;
+}
+
+.form-footer a {
+  color: #304d5c;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.form-footer a:hover {
+  text-decoration: underline;
+}

@@ -55,7 +55,6 @@ const App = () => {
     setShowAdminBoard(false);
     setCurrentUser(undefined);
     showSuccess("Vous avez été déconnecté avec succès");
-    // window.location.href = "/login"; // Redirection forcée vers la page de login
   };
 
   return (

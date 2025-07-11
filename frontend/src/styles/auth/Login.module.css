@@ -1,30 +1,33 @@
 .wrapper {
-  min-height: 100vh;
+  display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: calc(100vh - 140px);
+    padding: 2rem;
+    background-color: #ffffff;
   background-size: cover;
-  background-image: url(https://images.unsplash.com/photo-1732045996654-6b5917c337c8?fm=jpg&q=60&w=3000&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D);
   background-position: center;
 }
 
 .form {
-  border-right: 1px solid light-dark(var(--mantine-color-gray-3), var(--mantine-color-dark-7));
-  min-height: 100vh;
-  max-width: 450px;
-  padding: 30px;
-  padding-top: 80px;
-  border-radius: 0;
+  background-color: #f5f5f5;
+    border: 1px solid #f5f5f5;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    padding: 2.5rem;
+    width: 100%;
+    max-width: 480px;
 }
 
 @media (max-width: 768px) {
   .form {
     max-width: 100%;
+    padding: 2rem 1.5rem;
   }
 }
 
 .title {
-  color: light-dark(var(--mantine-color-black), var(--mantine-color-white));
-  font-family: Outfit, var(--mantine-font-family);
-  font-weight: 500;
-  text-align: center;
-  margin-top: var(--mantine-spacing-md);
-  margin-bottom: 50px;
+  color: #5c768a;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
 }

@@ -1,4 +1,4 @@
-import { useNotifications } from '@mantine/notifications';
+import { notifications } from '@mantine/notifications';
 import { IconCheck, IconX } from '@tabler/icons-react';
 
 /**
@@ -7,8 +7,6 @@ import { IconCheck, IconX } from '@tabler/icons-react';
  */
 
 export function useAppNotifications() {
-  const notifications = useNotifications();
-
   return {
     /**
      * Affiche une notification de succès
@@ -69,6 +67,9 @@ export function useAppNotifications() {
     },
     
     // Accès à l'API complète de notifications
-    ...notifications
+    show: notifications.show,
+    hide: notifications.hide,
+    update: notifications.update,
+    clean: notifications.clean
   };
 }

@@ -11,9 +11,10 @@ import {
   Title,
   Alert,
 } from '@mantine/core';
-import { IconAlertCircle } from '@tabler/icons-react';
+import { IconAlertCircle, IconAt, IconLock } from '@tabler/icons-react';
 import AuthService from "../services/auth.service";
 import { useAppNotifications } from "../hooks/useAppNotifications";
+import { designTokens } from "../theme/designTokens";
 import classes from "../styles/auth/Login.module.css";
 
 const Login = () => {
@@ -61,8 +62,16 @@ const Login = () => {
 
   return (
     <div className={classes.wrapper}>
-      <Paper className={classes.form}>
-        <Title order={2} className={classes.title}>
+      <Paper className={classes.form} style={{
+        backgroundColor: designTokens.colors.container.form.bg,
+        borderColor: designTokens.colors.container.form.border
+      }}>
+        <Title order={1} className={classes.title} style={{
+          color: designTokens.colors.text.h1,
+          fontFamily: designTokens.typography.fontFamily.heading,
+          marginBottom: '1.5rem',
+          textAlign: 'center'
+        }}>
           Bienvenue sur GroupWork
         </Title>
 
@@ -70,22 +79,50 @@ const Login = () => {
           <TextInput
             label="Nom d'utilisateur"
             placeholder="Votre nom d'utilisateur"
+            leftSection={<IconAt size={16} color="#87939c" />}
             size="md"
             radius="md"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
             required
+            styles={{
+              input: {
+                backgroundColor: '#ffffff',
+                borderColor: designTokens.colors.container.form.border,
+                color: designTokens.colors.container.form.content,
+              },
+              label: {
+                color: designTokens.colors.text.body,
+                fontFamily: designTokens.typography.fontFamily.body,
+                fontWeight: 500,
+                marginBottom: '0.3rem'
+              }
+            }}
           />
 
           <PasswordInput
             label="Mot de passe"
             placeholder="Votre mot de passe"
+            leftSection={<IconLock size={16} color="#87939c" />}
             mt="md"
             size="md"
             radius="md"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
+            styles={{
+              input: {
+                backgroundColor: '#ffffff',
+                borderColor: designTokens.colors.container.form.border,
+                color: designTokens.colors.container.form.content,
+              },
+              label: {
+                color: designTokens.colors.text.body,
+                fontFamily: designTokens.typography.fontFamily.body,
+                fontWeight: 500,
+                marginBottom: '0.3rem'
+              }
+            }}
           />
 
           <Checkbox
@@ -94,6 +131,12 @@ const Login = () => {
             size="md"
             checked={rememberMe}
             onChange={(e) => setRememberMe(e.currentTarget.checked)}
+            styles={{
+              label: {
+                color: designTokens.colors.text.body,
+                fontFamily: designTokens.typography.fontFamily.body
+              }
+            }}
           />
 
           {message && (
@@ -109,18 +152,33 @@ const Login = () => {
 
           <Button
             fullWidth
+            variant="filled"
             mt="xl"
             size="md"
             radius="md"
             type="submit"
             loading={loading}
+            sx={{
+              backgroundColor: designTokens.colors.button.validation.bg,
+              fontFamily: designTokens.typography.fontFamily.body,
+              fontWeight: 500
+            }}
+            className="hover:bg-btn-validation-hover transition-colors"
           >
             Se connecter
           </Button>
 
-          <Text ta="center" mt="md">
+          <Text ta="center" mt="xl" style={{
+            color: designTokens.colors.text.comment,
+            fontFamily: designTokens.typography.fontFamily.body
+          }}>
             Pas encore de compte ?{' '}
-            <Anchor component={Link} to="/register" fw={500}>
+            <Anchor
+              component={Link}
+              to="/register"
+              fw={500}
+              style={{ color: designTokens.colors.text.h2 }}
+            >
               S'inscrire
             </Anchor>
           </Text>
