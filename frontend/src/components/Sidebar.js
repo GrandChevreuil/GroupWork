@@ -9,18 +9,26 @@ const Sidebar = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const user = AuthService.getCurrentUser();
-    if (user) {
-      setCurrentUser(user);
-      setShowModeratorBoard(user.roles.includes("SUPERVISING_STAFF"));
-      setShowAdminBoard(user.roles.includes("ADMIN_SYSTEM"));
+    try {
+      const user = AuthService.getCurrentUser();
+      if (user) {
+        setCurrentUser(user);
+        setShowModeratorBoard(user.roles && user.roles.includes("SUPERVISING_STAFF"));
+        setShowAdminBoard(user.roles && user.roles.includes("ADMIN_SYSTEM"));
+      }
+    } catch (error) {
+      console.log("Error loading user data:", error);
     }
   }, []);
 
   const handleLogout = () => {
-    AuthService.logout();
-    setCurrentUser(null);
-    navigate("/login");
+    try {
+      AuthService.logout();
+      setCurrentUser(null);
+      navigate("/login");
+    } catch (error) {
+      console.log("Error during logout:", error);
+    }
   };
 
   return (
